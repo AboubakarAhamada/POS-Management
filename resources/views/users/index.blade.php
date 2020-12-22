@@ -21,6 +21,9 @@
                                 <th>Role</th>
                                 <th>Action</th>
                             </thead>
+                            {{--Pagination--}}
+                            {{$users->links()}}
+                            <tbody>
                             @foreach ($users as $key => $user)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -38,7 +41,7 @@
                                             <a href="#" data-toggle="modal" data-target="#editUser{{ $user->id }}"
                                                 class="btn btn-warning">
                                                 <i class="fa fa-edit"></i> Modifier
-                                            </a> &nbsp;&nbsp;
+                                            </a>
                                             <a href="#" data-toggle="modal" data-target="#deleteUser{{$user->id}}" class="btn btn-danger">
                                                 <i class="fa fa-trash"> Supprimer</i>
                                             </a>
@@ -118,6 +121,7 @@
     </div>
 
     @endforeach
+    </tbody>
     </table>
     </div>
     </div>

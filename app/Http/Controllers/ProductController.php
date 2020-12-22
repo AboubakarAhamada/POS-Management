@@ -14,7 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.index');
+        $products = Product::paginate(5);
+        return view('products.index',compact('products'));
     }
 
     /**
@@ -35,7 +36,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::create($request->all());
+        $product->save();
+        if($product){
+            return redirect()->back()->with('Le nouveau produit a été ajouté avec succès');
+        }
+        redirect()->back()->with("Une erreur s'est produit lors de l'ajout du produit");
+
     }
 
     /**
@@ -67,9 +74,17 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+
+        if(!$product){
+            return back()->with('Erreur','Impossible de trouver ce produit');
+
+        }
+
+        $product->update($request->all());
+        return back()->with('Success', 'Less mises à jours ont étés bien effectuées !');
     }
 
     /**
@@ -80,6 +95,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        $product->delete();
+        return back()->with("Success", "Le produit est bien supprimé de la base de données !");
     }
 }

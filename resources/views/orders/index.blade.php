@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
+            
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
@@ -12,6 +13,8 @@
                             <i class="fa fa-plus"></i> Nouvelle commande
                         </a>
                     </div>
+                    <form action="{{route('orders.store')}}" method="POST">
+                        @csrf
                     <div class="card-body">
 
                         <table class="table table-bordered table-left">
@@ -22,7 +25,7 @@
                                 <th>Quantité<span style="color: red"> *</span> </th>
                                 <th>Dis (%)</span> </th>
                                 <th>Total<span style="color: red"> *</span> </th>
-                                <th><button class="btn btn-sm btn-success add_more"> <i class="fa fa-plus"></i></button>
+                                <th><a href="#" class="btn btn-sm btn-success add_more"> <i class="fa fa-plus"></i></a>
                                 </th>
                             </thead>
                             <tbody class="addMoreProduct">
@@ -43,7 +46,7 @@
                                             class="form-control quantity"></td>
                                     <td><input type="text" name="discount[]" id="discount" class="form-control discount">
                                     </td>
-                                    <td><input type="text" name="total[]" id="total" readonly class="form-control total_amount"></td>
+                                    <td><input type="text" name="total_amount[]" id="total" readonly class="form-control total_amount"></td>
                                     <td><button class="btn btn-sm btn-secondary"> <i class="fa fa-times"></i></button></td>
                                 </tr>
 
@@ -59,6 +62,7 @@
                         <h4> Total : <b class="total">0.00</b> </h4>
                     </div>
                     <div class="card-body">
+                        
                         <div class="row">
                             <table class="table table-striped">
 
@@ -93,15 +97,22 @@
                                             </label>
                                         </span>
                                     <br>
-    
-                                       <label for=""><b>Payement : </b></label> <input type="text" name="paind_amount" id="paid_amount"
+                                    
+                                       <label for=""><b>Payement : </b></label> <input type="text" name="paid_amount" id="paid_amount"
                                             class="form-control"><br><br>
                                        <label for=""><b> Retourné : </b></label>
                                         <input type="text" name="balance" id="balance" readonly class="form-control">
+                                    
+                                    <br><br>
+                                    <button type="submit" class="btn btn-primary btn-block">Enregistrer</button>
+                                    <button class="btn btn-danger btn-block"> Calculatrice</button><br><br>
+                                    <a href="#" style="text-align: center;color:red;font-size:18px; margin-top:10px"> <i class="fa fa-sign-out-alt"> Log out</i> </a>
                         </div>
+                
                     </div>
                 </div>
             </div>
+        </form>
         </div>
     </div>
 
@@ -175,7 +186,7 @@
                 total += amount;
             });
 
-            $('.total').html(total);
+            $('.total').html(total.toFixed(2));   // 2 chiffres après la virgule
         }
 
         $('.addMoreProduct').delegate('.product_id', 'change', function() {
@@ -187,7 +198,7 @@
             var price = tr.find('.price').val() - 0;
             var discount = tr.find('.discount').val() - 0;
             var total_amount = (quantity * price) - ((quantity * price * discount) / 100);
-            tr.find('.total_amount').val(total_amount);
+            tr.find('.total_amount').val(total_amount.toFixed(2));
             totalAmount();
 
         })
@@ -198,8 +209,17 @@
             var price = tr.find('.price').val() - 0;
             var discount = tr.find('.discount').val() - 0;
             var total_amount = (quantity * price) - ((quantity * price * discount) / 100);
-            tr.find('.total_amount').val(total_amount);
+            tr.find('.total_amount').val(total_amount.toFixed(2));
             totalAmount();
+
+        })
+
+        $('#paid_amount').keyup(function(){
+            //alert('kkkkk')
+            var total = $('.total').html();
+            var paid_amount = $(this).val();
+            var balance = paid_amount - total;
+            $('#balance').val(balance.toFixed(2));
 
         })
 

@@ -15,7 +15,7 @@ class Transaction extends Model
         'order_id',
         'user_id',
         'balance',
-        'paind_amount',
+        'paid_amount',
         'transact_amount',
         'payment_method',
         'transact_date',
